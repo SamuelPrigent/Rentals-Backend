@@ -3,10 +3,10 @@ package com.example.learnSpring.dto;
 
 import com.example.learnSpring.model.House;
 
-public class HouseByIdResponse {
+public class OneHouse {
     private House house;
 
-    public HouseByIdResponse(House house) {
+    public OneHouse(House house) {
         this.house = house;
     }
 
