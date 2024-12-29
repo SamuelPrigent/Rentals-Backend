@@ -1,6 +1,7 @@
 # Rental API
 
-API REST Spring Boot. Cette API fonctionne en tandem avec le repo : https://github.com/OpenClassrooms-Student-Center/Developpez-le-back-end-en-utilisant-Java-et-Spring.
+Backend (API REST) avec Spring Boot.
+Cette API fonctionne en tandem avec le Frontend Angular de ce repo : https://github.com/OpenClassrooms-Student-Center/Developpez-le-back-end-en-utilisant-Java-et-Spring.
 
 ## Prérequis
 
