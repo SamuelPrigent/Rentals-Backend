@@ -23,8 +23,8 @@ CREATE DATABASE springdb;
 1. Cloner le repository
 
 ```bash
-git clone <votre-repo-url>
-cd Back
+git clone https://github.com/SamuelPrigent/Rentals-Backend
+cd Rentals-Backend
 ```
 
 2. Installer les dépendances
