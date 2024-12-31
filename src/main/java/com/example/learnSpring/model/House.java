@@ -1,7 +1,9 @@
 package com.example.learnSpring.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,6 +21,7 @@ public class House {
     private Double price;
 
     @ElementCollection
+    // Table house_pictures <=> house_id
     @CollectionTable(name = "house_pictures", joinColumns = @JoinColumn(name = "house_id"))
     @Column(name = "picture_url")
     private List<String> picture;
@@ -29,11 +32,13 @@ public class House {
     @Column(name = "owner_id")
     private Long ownerId;
 
-    @Column(name = "created_at")
-    private LocalDate createdAt;
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     // Constructeurs
     public House() {
@@ -96,19 +101,19 @@ public class House {
         this.ownerId = ownerId;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

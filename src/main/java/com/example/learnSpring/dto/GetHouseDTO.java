@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 // import java.time.LocalDate;
 
-public class OneHouseDTO {
+public class GetHouseDTO {
     private Long id;
     private String name;
     private Integer surface;
@@ -24,8 +24,8 @@ public class OneHouseDTO {
     @JsonProperty("updated_at") // updatedAt (BDD) => "updated_at" (JSON)
     private String updatedAt;
 
-    // Constructeur convertit une entité House en DTO
-    public OneHouseDTO(House house) {
+    // Constructeur convertit entité House dans le format DTO souhaité
+    public GetHouseDTO(House house) {
         this.id = house.getId();
         this.name = house.getName();
         this.surface = house.getSurface();
