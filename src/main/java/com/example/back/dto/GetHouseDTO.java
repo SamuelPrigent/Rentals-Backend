@@ -1,6 +1,6 @@
-package com.example.learnSpring.dto;
+package com.example.back.dto;
 
-import com.example.learnSpring.model.House;
+import com.example.back.model.House;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 // import java.time.LocalDate;

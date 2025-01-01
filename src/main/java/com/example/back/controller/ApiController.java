@@ -1,17 +1,19 @@
-package com.example.learnSpring.controller;
+package com.example.back.controller;
 
-import com.example.learnSpring.dto.GetAllHousesDTO;
-import com.example.learnSpring.dto.GetHouseDTO;
-import com.example.learnSpring.dto.CreateHouseDTO;
-import com.example.learnSpring.dto.UpdateHouseDTO;
-import com.example.learnSpring.model.House;
-import com.example.learnSpring.repository.HouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.learnSpring.exception.ResourceNotFoundException;
+
+import com.example.back.dto.CreateHouseDTO;
+import com.example.back.dto.GetAllHousesDTO;
+import com.example.back.dto.GetHouseDTO;
+import com.example.back.dto.UpdateHouseDTO;
+import com.example.back.exception.ResourceNotFoundException;
+import com.example.back.model.House;
+import com.example.back.repository.HouseRepository;
 
 // REST API (détecté par spring)
+// transformé en rentalsController TODO
 @RestController
 @RequestMapping("/api")
 public class ApiController {
@@ -30,7 +32,11 @@ public class ApiController {
     // get all
     @GetMapping("/rentals")
     public GetAllHousesDTO getAllHouses() {
-        return new GetAllHousesDTO(houseRepository.findAll());
+        // besoins logique métier (services)
+        // bdd
+        return new GetAllHousesDTO(houseRepository.findAll()); //
+        //
+
     }
 
     // get one
@@ -44,6 +50,7 @@ public class ApiController {
     // create one house
     @PostMapping("/rentals")
     // Spring convertit le JSON reçu en objet CreateHouseDTO
+    // faire ça dans la couche service (le controller ne doit pas savoir ça TODO)
     public ResponseEntity<GetHouseDTO> createHouse(@RequestBody CreateHouseDTO request) {
         // Création d'une entité House
         House house = new House();
@@ -51,7 +58,7 @@ public class ApiController {
         house.setName(request.getName());
         house.setSurface(request.getSurface());
         house.setPrice(request.getPrice());
-        house.setPicture(request.getPicture());
+        house.setPicture(request.getPicture()); //
         house.setDescription(request.getDescription());
         house.setOwnerId(request.getOwnerId());
         // Sauvegarde l'entité en base de données
@@ -100,7 +107,7 @@ public class ApiController {
         return ResponseEntity.ok(new GetHouseDTO(updatedHouse));
     }
 
-    // delete one house
+    // ------------ delete one house (dev routes)
     @DeleteMapping("/rentals/{id}")
     public ResponseEntity<?> deleteHouse(@PathVariable Long id) {
         return houseRepository.findById(id)

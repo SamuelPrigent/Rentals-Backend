@@ -1,4 +1,4 @@
-package com.example.learnSpring.model;
+package com.example.back.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,7 +21,8 @@ public class House {
     private Double price;
 
     @ElementCollection
-    // Table house_pictures <=> house_id
+    // Table house_pictures <=> house_id // TODO ne pas faire de 2ème table
+    // relationnelle
     @CollectionTable(name = "house_pictures", joinColumns = @JoinColumn(name = "house_id"))
     @Column(name = "picture_url")
     private List<String> picture;
@@ -30,7 +31,7 @@ public class House {
     private String description;
 
     @Column(name = "owner_id")
-    private Long ownerId;
+    private Long ownerId; // implémenter type user
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

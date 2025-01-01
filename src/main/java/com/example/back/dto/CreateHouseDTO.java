@@ -1,4 +1,4 @@
-package com.example.learnSpring.dto;
+package com.example.back.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;

@@ -1,11 +1,12 @@
 // dto: data transfer object
-package com.example.learnSpring.dto;
+package com.example.back.dto;
 
-import com.example.learnSpring.model.House;
 import java.util.List;
 
+import com.example.back.model.House;
+
 public class GetAllHousesDTO {
-    private List<House> rentals; // Format de retour avec la clés : "rentals"
+    private List<House> rentals; // Format de retour avec la clés : "rentals" // changer en rentals TODO
 
     public GetAllHousesDTO(List<House> rentals) {
         this.rentals = rentals;

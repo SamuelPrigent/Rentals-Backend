@@ -1,4 +1,4 @@
-package com.example.learnSpring.exception;
+package com.example.back.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

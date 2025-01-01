@@ -1,4 +1,4 @@
-package com.example.learnSpring.exception;
+package com.example.back.exception;
 
 /**
  * Lancée lorsqu'une ressource n'est pas trouvée dans la base de
