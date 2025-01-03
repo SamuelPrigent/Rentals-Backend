@@ -1,4 +1,4 @@
-// package com.example.learnSpring;
+// package com.example.back;
 
 // import org.junit.jupiter.api.Test;
 // import org.springframework.boot.test.context.SpringBootTest;
@@ -9,8 +9,8 @@
 // import static org.junit.jupiter.api.Assertions.assertTrue;
 // import static org.junit.jupiter.api.Assertions.assertEquals;
 // import org.springframework.beans.factory.annotation.Autowired;
-// import com.example.learnSpring.service.Service;
-// import com.example.learnSpring.HelloWorld.HelloWorld;
+// import com.example.back.service.Service;
+// import com.example.back.HelloWorld.HelloWorld;
 
 // @SpringBootTest
 // class ApplicationTests {

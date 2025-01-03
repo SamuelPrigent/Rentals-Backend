@@ -1,13 +1,13 @@
 package com.example.back.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
+// import java.util.List;
 
-public class UpdateHouseDTO {
+public class CreateRentalDTO {
     private String name;
     private Integer surface;
     private Double price;
-    private List<String> picture;
+    private String picture;
     private String description;
 
     @JsonProperty("owner_id")
@@ -26,7 +26,7 @@ public class UpdateHouseDTO {
         return price;
     }
 
-    public List<String> getPicture() {
+    public String getPicture() {
         return picture;
     }
 
@@ -51,7 +51,7 @@ public class UpdateHouseDTO {
         this.price = price;
     }
 
-    public void setPicture(List<String> picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 
@@ -61,15 +61,5 @@ public class UpdateHouseDTO {
 
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
-    }
-
-    // Request validation (method)
-    public void validate() throws IllegalArgumentException {
-        if (surface != null && surface <= 0) {
-            throw new IllegalArgumentException("La surface doit être > 0");
-        }
-        if (price != null && price < 0) {
-            throw new IllegalArgumentException("Le prix doit être > 0");
-        }
     }
 }

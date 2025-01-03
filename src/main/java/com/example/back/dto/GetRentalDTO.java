@@ -1,16 +1,16 @@
 package com.example.back.dto;
 
-import com.example.back.model.House;
+import com.example.back.model.Rentals;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
+// import java.util.List;
 // import java.time.LocalDate;
 
-public class GetHouseDTO {
+public class GetRentalDTO {
     private Long id;
     private String name;
     private Integer surface;
     private Double price;
-    private List<String> picture;
+    private String picture;
     private String description;
 
     // ==== JsonProperty ====
@@ -25,7 +25,7 @@ public class GetHouseDTO {
     private String updatedAt;
 
     // Constructeur convertit entité House dans le format DTO souhaité
-    public GetHouseDTO(House house) {
+    public GetRentalDTO(Rentals house) {
         this.id = house.getId();
         this.name = house.getName();
         this.surface = house.getSurface();
@@ -54,7 +54,7 @@ public class GetHouseDTO {
         return price;
     }
 
-    public List<String> getPicture() {
+    public String getPicture() {
         return picture;
     }
 

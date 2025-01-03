@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "houses")
-public class House {
+@Table(name = "rentals")
+public class Rentals {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,12 +19,8 @@ public class House {
 
     private Double price;
 
-    @ElementCollection
-    // Table house_pictures <=> house_id // TODO ne pas faire de 2ème table
-    // relationnelle
-    @CollectionTable(name = "house_pictures", joinColumns = @JoinColumn(name = "house_id"))
     @Column(name = "picture_url")
-    private List<String> picture;
+    private String picture;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -42,7 +37,7 @@ public class House {
     private LocalDateTime updatedAt;
 
     // Constructeurs
-    public House() {
+    public Rentals() {
     }
 
     // Getters et Setters
@@ -78,11 +73,11 @@ public class House {
         this.price = price;
     }
 
-    public List<String> getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(List<String> picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 

@@ -3,24 +3,23 @@ package com.example.back.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.example.back.dto.CreateHouseDTO;
-import com.example.back.dto.GetAllHousesDTO;
-import com.example.back.dto.GetHouseDTO;
-import com.example.back.dto.UpdateHouseDTO;
+import com.example.back.dto.CreateRentalDTO;
+import com.example.back.dto.GetAllRentalDTO;
+import com.example.back.dto.GetRentalDTO;
+import com.example.back.dto.UpdateRentalDTO;
 import com.example.back.exception.ResourceNotFoundException;
-import com.example.back.model.House;
-import com.example.back.repository.HouseRepository;
+import com.example.back.model.Rentals;
+import com.example.back.repository.RentalRepository;
 
 // REST API (détecté par spring)
 // transformé en rentalsController TODO
 @RestController
 @RequestMapping("/api")
-public class ApiController {
+public class RentalsController {
 
     // --- Database tables ---
     @Autowired
-    private HouseRepository houseRepository;
+    private RentalRepository houseRepository;
 
     // ======== Hello (check api) ========
     @GetMapping("/")
@@ -31,10 +30,10 @@ public class ApiController {
     // ======== Houses ========
     // get all
     @GetMapping("/rentals")
-    public GetAllHousesDTO getAllHouses() {
+    public GetAllRentalDTO getAllHouses() {
         // besoins logique métier (services)
         // bdd
-        return new GetAllHousesDTO(houseRepository.findAll()); //
+        return new GetAllRentalDTO(houseRepository.findAll()); //
         //
 
     }
@@ -43,7 +42,7 @@ public class ApiController {
     @GetMapping("/rentals/{id}")
     public ResponseEntity<?> getOneHouse(@PathVariable Long id) {
         return houseRepository.findById(id)
-                .map(house -> ResponseEntity.ok(new GetHouseDTO(house)))
+                .map(house -> ResponseEntity.ok(new GetRentalDTO(house)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -51,9 +50,9 @@ public class ApiController {
     @PostMapping("/rentals")
     // Spring convertit le JSON reçu en objet CreateHouseDTO
     // faire ça dans la couche service (le controller ne doit pas savoir ça TODO)
-    public ResponseEntity<GetHouseDTO> createHouse(@RequestBody CreateHouseDTO request) {
+    public ResponseEntity<GetRentalDTO> createHouse(@RequestBody CreateRentalDTO request) {
         // Création d'une entité House
-        House house = new House();
+        Rentals house = new Rentals();
         // Attribution des données de la request à l'entité
         house.setName(request.getName());
         house.setSurface(request.getSurface());
@@ -62,9 +61,9 @@ public class ApiController {
         house.setDescription(request.getDescription());
         house.setOwnerId(request.getOwnerId());
         // Sauvegarde l'entité en base de données
-        House savedHouse = houseRepository.save(house);
+        Rentals savedHouse = houseRepository.save(house);
         // Convertit l'entité sauvegardée en DTO pour la réponse
-        return ResponseEntity.ok(new GetHouseDTO(savedHouse));
+        return ResponseEntity.ok(new GetRentalDTO(savedHouse));
     }
 
     // @PutMapping("/rentals/{id}")
@@ -89,11 +88,11 @@ public class ApiController {
 
     // update one house
     @PutMapping("/rentals/{id}")
-    public ResponseEntity<?> updateHouse(@PathVariable Long id, @RequestBody UpdateHouseDTO request) {
+    public ResponseEntity<?> updateHouse(@PathVariable Long id, @RequestBody UpdateRentalDTO request) {
         // Validation des données
         request.validate();
         // Recherche de la maison
-        House house = houseRepository.findById(id)
+        Rentals house = houseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No house found with id: " + id));
         // Met à jour les données de l'entité
         house.setName(request.getName());
@@ -103,8 +102,8 @@ public class ApiController {
         house.setDescription(request.getDescription());
         house.setOwnerId(request.getOwnerId());
         // Sauvegarde les modifications
-        House updatedHouse = houseRepository.save(house);
-        return ResponseEntity.ok(new GetHouseDTO(updatedHouse));
+        Rentals updatedHouse = houseRepository.save(house);
+        return ResponseEntity.ok(new GetRentalDTO(updatedHouse));
     }
 
     // ------------ delete one house (dev routes)
