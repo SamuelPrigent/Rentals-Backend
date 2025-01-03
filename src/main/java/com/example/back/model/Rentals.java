@@ -26,7 +26,7 @@ public class Rentals {
     private String description;
 
     @Column(name = "owner_id")
-    private Long ownerId; // implémenter type user
+    private Long ownerId; // implémenter model User ?
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

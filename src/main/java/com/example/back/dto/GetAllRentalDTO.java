@@ -8,6 +8,7 @@ import com.example.back.model.Rentals;
 public class GetAllRentalDTO {
     private List<Rentals> rentals; // Format de retour avec la clés : "rentals" // changer en rentals TODO
 
+    // Constructeur
     public GetAllRentalDTO(List<Rentals> rentals) {
         this.rentals = rentals;
     }

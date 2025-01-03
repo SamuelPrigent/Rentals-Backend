@@ -1,16 +1,13 @@
 package com.example.back.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-// import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public class CreateRentalDTO {
     private String name;
     private Integer surface;
     private Double price;
-    private String picture;
+    private MultipartFile picture;
     private String description;
-
-    @JsonProperty("owner_id")
     private Long ownerId;
 
     // Getters
@@ -26,7 +23,7 @@ public class CreateRentalDTO {
         return price;
     }
 
-    public String getPicture() {
+    public MultipartFile getPicture() {
         return picture;
     }
 
@@ -51,7 +48,7 @@ public class CreateRentalDTO {
         this.price = price;
     }
 
-    public void setPicture(String picture) {
+    public void setPicture(MultipartFile picture) {
         this.picture = picture;
     }
 
@@ -62,4 +59,5 @@ public class CreateRentalDTO {
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
     }
+
 }
