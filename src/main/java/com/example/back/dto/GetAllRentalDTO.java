@@ -5,8 +5,11 @@ import java.util.List;
 
 import com.example.back.model.Rentals;
 
+// C'est dans mes DTO que je dois normalment importer la BDD ?
+// 
+
 public class GetAllRentalDTO {
-    private List<Rentals> rentals; // Format de retour avec la clés : "rentals" // changer en rentals TODO
+    private List<Rentals> rentals;
 
     // Constructeur
     public GetAllRentalDTO(List<Rentals> rentals) {

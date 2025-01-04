@@ -1,7 +1,9 @@
 package com.example.back.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+// import com.fasterxml.jackson.annotation.JsonProperty;
 // import java.util.List;
+
+// TODO pas normal que l'on puisse edit le ownerId 
 
 public class UpdateRentalDTO {
     private String name;
@@ -9,9 +11,6 @@ public class UpdateRentalDTO {
     private Double price;
     private String picture;
     private String description;
-
-    @JsonProperty("owner_id")
-    private Long ownerId;
 
     // Getters
     public String getName() {
@@ -34,10 +33,6 @@ public class UpdateRentalDTO {
         return description;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
     // Setters
     public void setName(String name) {
         this.name = name;
@@ -57,10 +52,6 @@ public class UpdateRentalDTO {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
     }
 
     // Request validation (method)
