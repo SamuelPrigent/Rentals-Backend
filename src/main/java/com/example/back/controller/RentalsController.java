@@ -23,13 +23,13 @@ public class RentalsController {
     // get all
     @GetMapping("/rentals")
     public ResponseEntity<GetAllRentalDTO> getAllRentals() {
-        return ResponseEntity.ok(rentalsService.getAllRentals());
+        return ResponseEntity.ok(rentalsService.getAll());
     }
 
     // get one
     @GetMapping("/rentals/{id}")
     public ResponseEntity<GetRentalDTO> getOneRental(@PathVariable Long id) {
-        return rentalsService.getOneRental(id)
+        return rentalsService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -37,14 +37,14 @@ public class RentalsController {
     // create one rental
     @PostMapping(value = "/rentals", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GetRentalDTO> createRental(@ModelAttribute CreateRentalDTO request) throws IOException {
-        GetRentalDTO createdRental = rentalsService.createRental(request);
+        GetRentalDTO createdRental = rentalsService.create(request);
         return ResponseEntity.ok(createdRental);
     }
 
     // update one rental
     @PutMapping(value = "/rentals/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GetRentalDTO> updateRental(@PathVariable Long id, @ModelAttribute UpdateRentalDTO request) {
-        GetRentalDTO updatedRental = rentalsService.updateRental(id, request);
+        GetRentalDTO updatedRental = rentalsService.update(id, request);
         return ResponseEntity.ok(updatedRental);
     }
 

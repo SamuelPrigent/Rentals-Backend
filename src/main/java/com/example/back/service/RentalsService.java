@@ -22,11 +22,11 @@ public class RentalsService {
     @Autowired // Database table
     private RentalRepository rentalRepository;
 
-    @Autowired
+    @Autowired // Hébergements des images
     private CloudinaryService cloudinaryService;
 
-    // get all
-    public GetAllRentalDTO getAllRentals() {
+    // get all rentals
+    public GetAllRentalDTO getAll() {
         List<Rentals> rentals = rentalRepository.findAll();
         List<GetRentalDTO> rentalDTOs = rentals.stream()
                 .map(rental -> new GetRentalDTO(rental))
@@ -34,14 +34,14 @@ public class RentalsService {
         return new GetAllRentalDTO(rentalDTOs);
     }
 
-    // get one rental
-    public Optional<GetRentalDTO> getOneRental(Long id) {
+    // get one rental with id
+    public Optional<GetRentalDTO> getById(Long id) {
         return rentalRepository.findById(id)
                 .map(rental -> new GetRentalDTO(rental));
     }
 
     // create rental
-    public GetRentalDTO createRental(CreateRentalDTO request) throws IOException {
+    public GetRentalDTO create(CreateRentalDTO request) throws IOException {
         // Création d'une entité rental
         Rentals rental = new Rentals();
         // Upload de l'image sur Cloudinary
@@ -61,8 +61,8 @@ public class RentalsService {
         return new GetRentalDTO(savedRental);
     }
 
-    // update rental
-    public GetRentalDTO updateRental(Long id, UpdateRentalDTO request) {
+    // Update rental
+    public GetRentalDTO update(Long id, UpdateRentalDTO request) {
         // Validation des données
         request.validate();
         // Search Rental
