@@ -69,7 +69,6 @@ public class RentalsService {
         rental.setName(request.getName());
         rental.setSurface(request.getSurface());
         rental.setPrice(request.getPrice());
-        rental.setPicture(request.getPicture());
         rental.setDescription(request.getDescription());
         // Sauvegarde les modifications
         Rentals updatedRental = rentalRepository.save(rental);

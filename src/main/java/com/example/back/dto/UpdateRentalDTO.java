@@ -1,15 +1,9 @@
 package com.example.back.dto;
 
-// import com.fasterxml.jackson.annotation.JsonProperty;
-// import java.util.List;
-
-// TODO pas normal que l'on puisse edit le ownerId 
-
 public class UpdateRentalDTO {
     private String name;
     private Integer surface;
     private Double price;
-    private String picture;
     private String description;
 
     // Getters
@@ -23,10 +17,6 @@ public class UpdateRentalDTO {
 
     public Double getPrice() {
         return price;
-    }
-
-    public String getPicture() {
-        return picture;
     }
 
     public String getDescription() {
@@ -44,10 +34,6 @@ public class UpdateRentalDTO {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
     }
 
     public void setDescription(String description) {
