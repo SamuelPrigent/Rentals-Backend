@@ -28,7 +28,10 @@ public class RentalsService {
     // get all
     public GetAllRentalDTO getAllRentals() {
         List<Rentals> rentals = rentalRepository.findAll();
-        return new GetAllRentalDTO(rentals);
+        List<GetRentalDTO> rentalDTOs = rentals.stream()
+                .map(rental -> new GetRentalDTO(rental))
+                .toList();
+        return new GetAllRentalDTO(rentalDTOs);
     }
 
     // get one rental

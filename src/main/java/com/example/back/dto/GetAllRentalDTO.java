@@ -3,24 +3,19 @@ package com.example.back.dto;
 
 import java.util.List;
 
-import com.example.back.model.Rentals;
-
-// C'est dans mes DTO que je dois normalment importer la BDD ?
-// 
-
 public class GetAllRentalDTO {
-    private List<Rentals> rentals;
+    private List<GetRentalDTO> rentals;
 
     // Constructeur
-    public GetAllRentalDTO(List<Rentals> rentals) {
+    public GetAllRentalDTO(List<GetRentalDTO> rentals) {
         this.rentals = rentals;
     }
 
-    public List<Rentals> getRentals() {
+    public List<GetRentalDTO> getRentals() {
         return rentals;
     }
 
-    public void setRentals(List<Rentals> rentals) {
+    public void setRentals(List<GetRentalDTO> rentals) {
         this.rentals = rentals;
     }
 }
