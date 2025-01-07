@@ -8,14 +8,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 // dto
 import com.example.back.dto.CreateUserDTO;
 import com.example.back.dto.GetUserDTO;
 import com.example.back.dto.LoginRequestDTO;
 import com.example.back.dto.LoginResponseDTO;
-import com.example.back.model.User; // model (dans un contorller ?)
 import com.example.back.service.UserService; // service
 import com.example.back.security.JwtUtil;
 
@@ -32,9 +30,6 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
     // Get user By ID
     @GetMapping("/user/{id}")
     public ResponseEntity<GetUserDTO> getUserById(@PathVariable Long id) {
@@ -43,38 +38,16 @@ public class AuthController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // @PostMapping(value = "/auth/register", produces =
-    // MediaType.APPLICATION_JSON_VALUE)
-    // public ResponseEntity<?> register(@RequestBody CreateUserDTO createUserDTO) {
-    // // Vérifier si l'email existe déjà
-    // if (userService.existsByEmail(createUserDTO.getEmail())) {
-    // return ResponseEntity.badRequest().body("Email already exists");
-    // }
-
-    // // Créer un nouvel utilisateur avec le mot de passe hashé
-    // User user = new User();
-    // user.setEmail(createUserDTO.getEmail());
-    // user.setName(createUserDTO.getName());
-    // user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
-
-    // User savedUser = userService.createUser(user);
-    // return ResponseEntity.ok(savedUser);
-    // }
-
-    // Register new user (Json request)
+    // Create a user (hashage du password)
     @PostMapping(value = "/auth/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@RequestBody CreateUserDTO createUserDTO) {
         // Vérifier si l'email existe déjà
         if (userService.existsByEmail(createUserDTO.getEmail())) {
             return ResponseEntity.badRequest().body("Email already exists");
         }
-        // Créer un nouvel utilisateur avec le mot de passe hashé
-        User user = new User();
-        user.setEmail(createUserDTO.getEmail());
-        user.setName(createUserDTO.getName());
-        user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
 
-        User savedUser = userService.createUser(user);
+        // Déléguer la création de l'utilisateur au service
+        GetUserDTO savedUser = userService.createUser(createUserDTO);
         return ResponseEntity.ok(savedUser);
     }
 
@@ -94,7 +67,7 @@ public class AuthController {
         }
     }
 
-    // Get current user
+    // Get current user (récupération info sur utilisateur via le token)
     @GetMapping("/auth/me")
     public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
         try {

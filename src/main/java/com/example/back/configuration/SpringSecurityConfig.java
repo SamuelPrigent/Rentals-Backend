@@ -36,7 +36,7 @@ public class SpringSecurityConfig {
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                // Bearer token filter (sur les requêtes)
+                // Routes sécurisé par le token obtenu dans le login
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

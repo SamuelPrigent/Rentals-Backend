@@ -15,6 +15,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserService userService;
 
+    /**
+     * Dans notre implémentation, le username est en fait l'email.
+     * C'est une pratique courante d'utiliser l'email comme identifiant unique.
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.findByEmail(email)

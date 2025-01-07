@@ -30,20 +30,18 @@ public class UserService {
     }
 
     // Create user
-    public GetUserDTO create(CreateUserDTO request) {
-        request.validate(); // Validation des données
+    public GetUserDTO createUser(CreateUserDTO createUserDTO) {
+        createUserDTO.validate(); // Validation des données
         // Vérification si l'email existe déjà
-        if (existsByEmail(request.getEmail())) {
+        if (existsByEmail(createUserDTO.getEmail())) {
             throw new IllegalArgumentException("Un utilisateur avec cet email existe déjà");
         }
-        // Création d'une entité user
         User user = new User();
-        user.setEmail(request.getEmail());
-        user.setName(request.getName());
-        // hashage du mdp
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        // save l'entité en BDD
-        User savedUser = createUser(user);
+        user.setEmail(createUserDTO.getEmail());
+        user.setName(createUserDTO.getName());
+        user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
+
+        User savedUser = userRepository.save(user);
         return new GetUserDTO(savedUser);
     }
 
