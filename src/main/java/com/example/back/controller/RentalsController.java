@@ -51,7 +51,6 @@ public class RentalsController {
         request.setPicture(picture);
         request.setDescription(description);
         request.setOwnerId(ownerId);
-
         GetRentalDTO createdRental = rentalsService.create(request);
         return ResponseEntity.ok(createdRental);
     }

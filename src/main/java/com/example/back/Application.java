@@ -18,8 +18,8 @@ public class Application {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void logApplicationStartup() {
-		System.out.println(ansi().fg(GREEN).a("---- API Listening port 3000 ----").reset());
-		System.out.println(ansi().fg(GREEN).a("|| DB PostgreSQL connectée sur le port 5432 ||").reset());
+		System.out.println(ansi().fg(GREEN).a("---- API Listening port 3001 ----").reset());
+		System.out.println(ansi().fg(GREEN).a(".. DB PostgreSQL / Port 5432 ..").reset());
 	}
 
 }
