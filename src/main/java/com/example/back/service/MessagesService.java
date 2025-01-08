@@ -13,6 +13,7 @@ import com.example.back.repository.UserRepository;
 import com.example.back.repository.RentalRepository;
 // dto
 import com.example.back.dto.CreateMessageDTO;
+import com.example.back.dto.MessageResponseDTO;
 
 @Service
 public class MessagesService {
@@ -26,7 +27,7 @@ public class MessagesService {
     @Autowired
     private RentalRepository rentalRepository;
 
-    public String postMessage(CreateMessageDTO request) {
+    public MessageResponseDTO postMessage(CreateMessageDTO request) {
         // Validation des données
         request.validate();
         // Récupération de l'utilisateur
@@ -42,6 +43,6 @@ public class MessagesService {
         message.setRental(rental);
         // Sauvegarde du message
         messageRepository.save(message);
-        return "Message send with success";
+        return new MessageResponseDTO("Message send with success");
     }
 }
