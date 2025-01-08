@@ -23,16 +23,16 @@ public class GetRentalDTO {
     private String updatedAt;
 
     // Constructeur convertit entité House dans le format DTO souhaité
-    public GetRentalDTO(Rentals house) {
-        this.id = house.getId();
-        this.name = house.getName();
-        this.surface = house.getSurface();
-        this.price = house.getPrice();
-        this.picture = house.getPicture();
-        this.description = house.getDescription();
-        this.ownerId = house.getOwnerId();
-        this.createdAt = house.getCreatedAt() != null ? house.getCreatedAt().toString() : null;
-        this.updatedAt = house.getUpdatedAt() != null ? house.getUpdatedAt().toString() : null;
+    public GetRentalDTO(Rentals rental) {
+        this.id = rental.getId();
+        this.name = rental.getName();
+        this.surface = rental.getSurface();
+        this.price = rental.getPrice();
+        this.picture = rental.getPicture();
+        this.description = rental.getDescription();
+        this.ownerId = rental.getOwner() != null ? rental.getOwner().getId() : null;
+        this.createdAt = rental.getCreatedAt() != null ? rental.getCreatedAt().toString() : null;
+        this.updatedAt = rental.getUpdatedAt() != null ? rental.getUpdatedAt().toString() : null;
     }
 
     // Getters

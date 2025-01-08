@@ -8,8 +8,10 @@ import java.io.IOException;
 import com.example.back.exception.ResourceNotFoundException;
 // model
 import com.example.back.model.Rentals;
+import com.example.back.model.User;
 // repo
 import com.example.back.repository.RentalRepository;
+import com.example.back.repository.UserRepository;
 // dto
 import com.example.back.dto.GetAllRentalDTO;
 import com.example.back.dto.GetRentalDTO;
@@ -19,10 +21,13 @@ import com.example.back.dto.UpdateRentalDTO;
 @Service
 public class RentalsService {
 
-    @Autowired // Database table
+    @Autowired
     private RentalRepository rentalRepository;
 
-    @Autowired // Hébergements des images
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private CloudinaryService cloudinaryService;
 
     // get all rentals
@@ -44,18 +49,25 @@ public class RentalsService {
     public GetRentalDTO create(CreateRentalDTO request) throws IOException {
         // Création d'une entité rental
         Rentals rental = new Rentals();
+
+        // Récupération de l'utilisateur propriétaire
+        User owner = userRepository.findById(request.getOwnerId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + request.getOwnerId()));
+
         // Upload de l'image sur Cloudinary
         String pictureUrl = null;
         if (request.getPicture() != null && !request.getPicture().isEmpty()) {
             pictureUrl = cloudinaryService.uploadFile(request.getPicture());
         }
+
         // Attribution des données de la request à l'entité
         rental.setName(request.getName());
         rental.setSurface(request.getSurface());
         rental.setPrice(request.getPrice());
         rental.setPicture(pictureUrl);
         rental.setDescription(request.getDescription());
-        rental.setOwnerId(request.getOwnerId());
+        rental.setOwner(owner);
+
         // Sauvegarde l'entité en base de données
         Rentals savedRental = rentalRepository.save(rental);
         return new GetRentalDTO(savedRental);

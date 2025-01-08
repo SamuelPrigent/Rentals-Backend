@@ -19,7 +19,7 @@ public class User {
     private String name;
 
     @Column(nullable = false)
-    private String password; // Sera hashé avant stockage
+    private String password; // hashé avant stockage
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

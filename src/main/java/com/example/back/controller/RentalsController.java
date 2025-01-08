@@ -18,7 +18,7 @@ import com.example.back.service.RentalsService;
 @RequestMapping("/api")
 public class RentalsController {
 
-    @Autowired // service métier
+    @Autowired
     private RentalsService rentalsService;
 
     // get all

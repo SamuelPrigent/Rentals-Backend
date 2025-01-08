@@ -25,8 +25,9 @@ public class Rentals {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "owner_id")
-    private Long ownerId; // implémenter model User ?
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -89,12 +90,12 @@ public class Rentals {
         this.description = description;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public LocalDateTime getCreatedAt() {
