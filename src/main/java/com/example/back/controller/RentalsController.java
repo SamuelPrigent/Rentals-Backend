@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
+import org.springframework.web.multipart.MultipartFile;
 // Dto
 import com.example.back.dto.CreateRentalDTO;
 import com.example.back.dto.GetAllRentalDTO;
@@ -36,7 +37,21 @@ public class RentalsController {
 
     // create one rental
     @PostMapping(value = "/rentals", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GetRentalDTO> createRental(@ModelAttribute CreateRentalDTO request) throws IOException {
+    public ResponseEntity<GetRentalDTO> createRental(
+            @RequestParam("name") String name,
+            @RequestParam("surface") Integer surface,
+            @RequestParam("price") Double price,
+            @RequestParam("picture") MultipartFile picture,
+            @RequestParam("description") String description,
+            @RequestParam("owner_id") Long ownerId) throws IOException {
+        CreateRentalDTO request = new CreateRentalDTO();
+        request.setName(name);
+        request.setSurface(surface);
+        request.setPrice(price);
+        request.setPicture(picture);
+        request.setDescription(description);
+        request.setOwnerId(ownerId);
+
         GetRentalDTO createdRental = rentalsService.create(request);
         return ResponseEntity.ok(createdRental);
     }
@@ -47,5 +62,4 @@ public class RentalsController {
         GetRentalDTO updatedRental = rentalsService.update(id, request);
         return ResponseEntity.ok(updatedRental);
     }
-
 }

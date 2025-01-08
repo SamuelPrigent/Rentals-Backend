@@ -1,9 +1,11 @@
 package com.example.back.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+// import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LoginRequestDTO {
-    @JsonProperty("login")
+    // ce n'est pas le champs login qui est utilisé côté front
+    // @JsonProperty("login")
+    // front
     private String email;
     private String password;
 

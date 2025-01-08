@@ -59,5 +59,4 @@ public class CreateRentalDTO {
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
     }
-
 }
