@@ -1,19 +1,19 @@
 package com.example.back.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.back.exception.ResourceNotFoundException;
-// model
+
 import com.example.back.model.Message;
-import com.example.back.model.User;
 import com.example.back.model.Rentals;
-// repo
+import com.example.back.model.User;
 import com.example.back.repository.MessageRepository;
-import com.example.back.repository.UserRepository;
 import com.example.back.repository.RentalRepository;
-// dto
+import com.example.back.repository.UserRepository;
 import com.example.back.dto.CreateMessageDTO;
-import com.example.back.dto.MessageResponseDTO;
+import com.example.back.dto.StringResponseDTO;
+import com.example.back.exception.ResourceNotFoundException;
 
 @Service
 public class MessagesService {
@@ -27,7 +27,7 @@ public class MessagesService {
     @Autowired
     private RentalRepository rentalRepository;
 
-    public MessageResponseDTO postMessage(CreateMessageDTO request) {
+    public StringResponseDTO postMessage(CreateMessageDTO request) {
         // Validation des données
         request.validate();
         // Récupération de l'utilisateur
@@ -41,8 +41,9 @@ public class MessagesService {
         message.setContent(request.getMessage());
         message.setUser(user);
         message.setRental(rental);
+        message.setCreatedAt(LocalDateTime.now());
         // Sauvegarde du message
         messageRepository.save(message);
-        return new MessageResponseDTO("Message send with success");
+        return new StringResponseDTO("Message send with success");
     }
 }

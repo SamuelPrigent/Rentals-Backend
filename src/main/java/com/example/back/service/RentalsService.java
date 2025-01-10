@@ -18,6 +18,7 @@ import com.example.back.dto.GetAllRentalDTO;
 import com.example.back.dto.GetRentalDTO;
 import com.example.back.dto.CreateRentalDTO;
 import com.example.back.dto.UpdateRentalDTO;
+import com.example.back.dto.StringResponseDTO;
 
 @Service
 public class RentalsService {
@@ -50,20 +51,17 @@ public class RentalsService {
     }
 
     // create rental
-    public GetRentalDTO create(CreateRentalDTO request) throws IOException {
+    public StringResponseDTO create(CreateRentalDTO request) throws IOException {
         // Création d'une entité rental
         Rentals rental = new Rentals();
-
         // Récupération de l'utilisateur propriétaire
         User owner = userRepository.findById(request.getOwnerId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + request.getOwnerId()));
-
         // Upload de l'image sur Cloudinary
         String pictureUrl = null;
         if (request.getPicture() != null && !request.getPicture().isEmpty()) {
             pictureUrl = cloudinaryService.uploadFile(request.getPicture());
         }
-
         // Attribution des données de la request à l'entité
         rental.setName(request.getName());
         rental.setSurface(request.getSurface());
@@ -71,14 +69,14 @@ public class RentalsService {
         rental.setDescription(request.getDescription());
         rental.setOwner(owner); // owner_id checked
         rental.setPicture(pictureUrl); // cloudinary
-
         // Sauvegarde l'entité en base de données
-        Rentals savedRental = rentalRepository.save(rental);
-        return new GetRentalDTO(savedRental);
+        rentalRepository.save(rental);
+        // Reponse
+        return new StringResponseDTO("Rental created !");
     }
 
     // Update rental
-    public GetRentalDTO update(Long id, UpdateRentalDTO request, String userEmail) {
+    public StringResponseDTO update(Long id, UpdateRentalDTO request, String userEmail) {
         // Validation des données
         request.validate();
         // Search Rental
@@ -105,7 +103,8 @@ public class RentalsService {
         rental.setDescription(request.getDescription());
 
         // Sauvegarde les modifications
-        Rentals updatedRental = rentalRepository.save(rental);
-        return new GetRentalDTO(updatedRental);
+        rentalRepository.save(rental);
+
+        return new StringResponseDTO("Rental updated successfully");
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.back.dto.CreateMessageDTO;
-import com.example.back.dto.MessageResponseDTO;
+import com.example.back.dto.StringResponseDTO;
 import com.example.back.service.MessagesService;
 
 @RestController
@@ -21,8 +21,8 @@ public class MessagesController {
 
     // Post message (Json request)
     @PostMapping(value = "/messages", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponseDTO> postMessage(@RequestBody CreateMessageDTO request) {
-        MessageResponseDTO response = messagesService.postMessage(request);
+    public ResponseEntity<StringResponseDTO> postMessage(@RequestBody CreateMessageDTO request) {
+        StringResponseDTO response = messagesService.postMessage(request);
         return ResponseEntity.ok(response);
     }
 }

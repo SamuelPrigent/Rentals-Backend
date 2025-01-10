@@ -1,5 +1,9 @@
 package com.example.back.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +14,7 @@ import com.example.back.dto.CreateRentalDTO;
 import com.example.back.dto.GetAllRentalDTO;
 import com.example.back.dto.GetRentalDTO;
 import com.example.back.dto.UpdateRentalDTO;
+import com.example.back.dto.StringResponseDTO;
 // Rentals service
 import com.example.back.service.RentalsService;
 // User service
@@ -23,6 +28,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Rentals", description = "API de gestion des locations")
 public class RentalsController {
 
     @Autowired
@@ -32,13 +38,18 @@ public class RentalsController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    // get all
+    @Operation(summary = "Get all rentals", description = "Retourne la liste de toutes les Rentals disponibles")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Liste des locations récupérée avec succès"),
+            @ApiResponse(responseCode = "401", description = "Non authentifié")
+    })
+    // get all rentals
     @GetMapping("/rentals")
     public ResponseEntity<GetAllRentalDTO> getAllRentals() {
         return ResponseEntity.ok(rentalsService.getAll());
     }
 
-    // get one
+    // get rentals by id
     @GetMapping("/rentals/{id}")
     public ResponseEntity<GetRentalDTO> getOneRental(@PathVariable Long id) {
         return rentalsService.getById(id)
@@ -46,9 +57,9 @@ public class RentalsController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // create one rental
+    // create rental
     @PostMapping(value = "/rentals", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GetRentalDTO> createRental(
+    public ResponseEntity<StringResponseDTO> createRental(
             @RequestParam("name") String name,
             @RequestParam("surface") Integer surface,
             @RequestParam("price") Double price,
@@ -56,14 +67,10 @@ public class RentalsController {
             @RequestParam("picture") MultipartFile picture,
             @RequestHeader("Authorization") String authHeader) throws IOException {
 
-        // Extraire le token du header (enlever "Bearer ")
         String token = authHeader.substring(7);
-        // Récupérer l'email depuis le token
         String userEmail = jwtUtil.extractUsername(token);
-        // Récupérer l'utilisateur via l'email
         User user = userService.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        // Récupérer l'ID de l'utilisateur
         Long ownerId = user.getId();
 
         CreateRentalDTO request = new CreateRentalDTO();
@@ -74,20 +81,21 @@ public class RentalsController {
         request.setDescription(description);
         request.setOwnerId(ownerId);
 
-        GetRentalDTO createdRental = rentalsService.create(request);
-        return ResponseEntity.ok(createdRental);
+        StringResponseDTO response = rentalsService.create(request);
+
+        return ResponseEntity.ok(response);
     }
 
-    // update one rental
+    // put rentals by id (if owner)
     @PutMapping(value = "/rentals/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<GetRentalDTO> updateRental(
+    public ResponseEntity<StringResponseDTO> updateRental(
             @PathVariable Long id,
             @ModelAttribute UpdateRentalDTO request,
             @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.substring(7);
         String userEmail = jwtUtil.extractUsername(token);
-        GetRentalDTO updatedRental = rentalsService.update(id, request, userEmail);
-        return ResponseEntity.ok(updatedRental);
+        StringResponseDTO response = rentalsService.update(id, request, userEmail);
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,9 +1,9 @@
 package com.example.back.dto;
 
-public class MessageResponseDTO {
+public class StringResponseDTO {
     private String message;
 
-    public MessageResponseDTO(String message) {
+    public StringResponseDTO(String message) {
         this.message = message;
     }
 
