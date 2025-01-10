@@ -1,18 +1,25 @@
 package com.example.back.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
-// Dto
+// dto
 import com.example.back.dto.CreateRentalDTO;
 import com.example.back.dto.GetAllRentalDTO;
 import com.example.back.dto.GetRentalDTO;
 import com.example.back.dto.UpdateRentalDTO;
 // Rentals service
 import com.example.back.service.RentalsService;
+// User service
+import com.example.back.service.UserService;
+// JWT Util
+import com.example.back.security.JwtUtil;
+// User model
+import com.example.back.model.User;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
@@ -20,6 +27,10 @@ public class RentalsController {
 
     @Autowired
     private RentalsService rentalsService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     // get all
     @GetMapping("/rentals")
@@ -41,9 +52,20 @@ public class RentalsController {
             @RequestParam("name") String name,
             @RequestParam("surface") Integer surface,
             @RequestParam("price") Double price,
-            @RequestParam("picture") MultipartFile picture,
             @RequestParam("description") String description,
-            @RequestParam("owner_id") Long ownerId) throws IOException {
+            @RequestParam("picture") MultipartFile picture,
+            @RequestHeader("Authorization") String authHeader) throws IOException {
+
+        // Extraire le token du header (enlever "Bearer ")
+        String token = authHeader.substring(7);
+        // Récupérer l'email depuis le token
+        String userEmail = jwtUtil.extractUsername(token);
+        // Récupérer l'utilisateur via l'email
+        User user = userService.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Récupérer l'ID de l'utilisateur
+        Long ownerId = user.getId();
+
         CreateRentalDTO request = new CreateRentalDTO();
         request.setName(name);
         request.setSurface(surface);
@@ -51,6 +73,7 @@ public class RentalsController {
         request.setPicture(picture);
         request.setDescription(description);
         request.setOwnerId(ownerId);
+
         GetRentalDTO createdRental = rentalsService.create(request);
         return ResponseEntity.ok(createdRental);
     }
