@@ -41,20 +41,32 @@ public class AuthController {
     // Create user (hashage du password)
     @PostMapping(value = "/auth/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@RequestBody CreateUserDTO createUserDTO) {
-        // Service pour check si utilisateur existe déjà
+        // Vérifier si l'utilisateur existe déjà
         if (userService.existsByEmail(createUserDTO.getEmail())) {
             return ResponseEntity.badRequest().body("Email already exists");
         }
-        // Création de l'utilisateur avec le service
-        GetUserDTO savedUser = userService.createUser(createUserDTO);
-        return ResponseEntity.ok(savedUser);
+
+        try {
+            // Créer l'utilisateur
+            userService.createUser(createUserDTO);
+            // Connecter automatiquement l'utilisateur
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(createUserDTO.getEmail(), createUserDTO.getPassword()));
+            // get user details
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String token = jwtUtil.generateToken(userDetails);
+            // return token
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
+        }
     }
 
     // Login (return token)
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
         try {
-            // authentification
+            // Authentification
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             // get user details
