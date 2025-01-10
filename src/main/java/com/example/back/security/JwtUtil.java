@@ -1,11 +1,13 @@
 package com.example.back.security;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import jakarta.annotation.PostConstruct;
 
 import java.security.Key;
 import java.util.Date;
@@ -16,7 +18,21 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Autowired
+    private Dotenv dotenv;
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        String secretKey = dotenv.get("JWT_SECRET_KEY");
+        if (secretKey == null || secretKey.trim().isEmpty()) {
+            throw new IllegalStateException("JWT_SECRET_KEY is not set in environment variables or .env file");
+        }
+        byte[] keyBytes = secretKey.getBytes();
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
+
     private final long jwtExpiration = 1000 * 60 * 60 * 10; // 10 hours
 
     public String generateToken(UserDetails userDetails) {
@@ -43,6 +59,7 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+    // TODO utiliser cette méthode pour récup l'id via le token ?
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

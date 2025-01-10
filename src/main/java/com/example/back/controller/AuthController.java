@@ -38,26 +38,26 @@ public class AuthController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Create a user (hashage du password)
+    // Create user (hashage du password)
     @PostMapping(value = "/auth/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@RequestBody CreateUserDTO createUserDTO) {
-        // Vérifier si l'email existe déjà
+        // Service pour check si utilisateur existe déjà
         if (userService.existsByEmail(createUserDTO.getEmail())) {
             return ResponseEntity.badRequest().body("Email already exists");
         }
-
-        // Déléguer la création de l'utilisateur au service
+        // Création de l'utilisateur avec le service
         GetUserDTO savedUser = userService.createUser(createUserDTO);
         return ResponseEntity.ok(savedUser);
     }
 
-    // Login (return decoded token)
+    // Login (return token)
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
         try {
+            // authentification
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
+            // get user details
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String token = jwtUtil.generateToken(userDetails);
 
@@ -67,13 +67,13 @@ public class AuthController {
         }
     }
 
-    // Get current user (récupération info sur utilisateur via le token)
+    // Get user info with token
     @GetMapping("/auth/me")
     public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
         try {
-            // Extraire le token du header (enlever "Bearer ")
+            // Extrait le token du header
             String token = authHeader.substring(7);
-            // Extraire l'email du token
+            // Extrait email du token
             String email = jwtUtil.extractClaim(token, claims -> claims.get("email", String.class));
             // Récupérer l'utilisateur depuis la base de données
             return userService.findByEmail(email)

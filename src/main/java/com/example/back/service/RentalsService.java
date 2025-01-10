@@ -64,9 +64,9 @@ public class RentalsService {
         rental.setName(request.getName());
         rental.setSurface(request.getSurface());
         rental.setPrice(request.getPrice());
-        rental.setPicture(pictureUrl);
         rental.setDescription(request.getDescription());
-        rental.setOwner(owner);
+        rental.setOwner(owner); // owner_id checked
+        rental.setPicture(pictureUrl); // cloudinary
 
         // Sauvegarde l'entité en base de données
         Rentals savedRental = rentalRepository.save(rental);
