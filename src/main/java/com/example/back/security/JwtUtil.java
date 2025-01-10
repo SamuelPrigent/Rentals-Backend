@@ -59,7 +59,6 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    // TODO utiliser cette méthode pour récup l'id via le token ?
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

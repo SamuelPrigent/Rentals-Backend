@@ -21,6 +21,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    // Unauthorized access to rental
+    @ExceptionHandler(UnauthorizedRentalAccessException.class)
+    public ResponseEntity<?> handleUnauthorizedRentalAccessException(UnauthorizedRentalAccessException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "403 Forbidden");
+        response.put("error_message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
     // Bad request
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex) {

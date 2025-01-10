@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.io.IOException;
 import com.example.back.exception.ResourceNotFoundException;
+import com.example.back.exception.UnauthorizedRentalAccessException;
 // model
 import com.example.back.model.Rentals;
 import com.example.back.model.User;
@@ -29,6 +30,9 @@ public class RentalsService {
 
     @Autowired
     private CloudinaryService cloudinaryService;
+
+    @Autowired
+    private UserService userService;
 
     // get all rentals
     public GetAllRentalDTO getAll() {
@@ -74,17 +78,32 @@ public class RentalsService {
     }
 
     // Update rental
-    public GetRentalDTO update(Long id, UpdateRentalDTO request) {
+    public GetRentalDTO update(Long id, UpdateRentalDTO request, String userEmail) {
         // Validation des données
         request.validate();
         // Search Rental
         Rentals rental = rentalRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No rental found with id: " + id));
-        // Updated the specific rental
+
+        // Vérifier que l'utilisateur est bien le propriétaire
+        User owner = userService.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if (rental.getOwner() == null) {
+            throw new UnauthorizedRentalAccessException("This rental has no owner defined");
+        }
+
+        if (!rental.getOwner().getId().equals(owner.getId())) {
+            throw new UnauthorizedRentalAccessException(
+                    "The user associated with this token is not authorized to modify this rental");
+        }
+
+        // Update the specific rental
         rental.setName(request.getName());
         rental.setSurface(request.getSurface());
         rental.setPrice(request.getPrice());
         rental.setDescription(request.getDescription());
+
         // Sauvegarde les modifications
         Rentals updatedRental = rentalRepository.save(rental);
         return new GetRentalDTO(updatedRental);

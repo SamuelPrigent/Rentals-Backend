@@ -79,9 +79,15 @@ public class RentalsController {
     }
 
     // update one rental
-    @PutMapping(value = "/rentals/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GetRentalDTO> updateRental(@PathVariable Long id, @ModelAttribute UpdateRentalDTO request) {
-        GetRentalDTO updatedRental = rentalsService.update(id, request);
+    @PutMapping(value = "/rentals/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<GetRentalDTO> updateRental(
+            @PathVariable Long id,
+            @ModelAttribute UpdateRentalDTO request,
+            @RequestHeader("Authorization") String authHeader) {
+
+        String token = authHeader.substring(7);
+        String userEmail = jwtUtil.extractUsername(token);
+        GetRentalDTO updatedRental = rentalsService.update(id, request, userEmail);
         return ResponseEntity.ok(updatedRental);
     }
 }
