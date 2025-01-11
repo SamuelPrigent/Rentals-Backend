@@ -82,20 +82,18 @@ public class RentalsService {
         // Search Rental
         Rentals rental = rentalRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No rental found with id: " + id));
-
-        // Vérifier que l'utilisateur est bien le propriétaire
+        // Get token owner user
         User owner = userService.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
+        // Check if rental have an ownerId
         if (rental.getOwner() == null) {
             throw new UnauthorizedRentalAccessException("This rental has no owner defined");
         }
-
+        // Check if owner Id of the rental is the token owner
         if (!rental.getOwner().getId().equals(owner.getId())) {
             throw new UnauthorizedRentalAccessException(
                     "The user associated with this token is not authorized to modify this rental");
         }
-
         // Update the specific rental
         rental.setName(request.getName());
         rental.setSurface(request.getSurface());
