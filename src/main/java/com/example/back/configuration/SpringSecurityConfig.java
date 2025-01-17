@@ -37,6 +37,7 @@ public class SpringSecurityConfig {
                             "/v3/api-docs/**",
                             "/api/v3/api-docs/**",
                             "/api/swagger-ui/**").permitAll();
+                    // other request
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
