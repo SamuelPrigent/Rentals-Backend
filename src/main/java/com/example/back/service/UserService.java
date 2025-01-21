@@ -11,6 +11,8 @@ import com.example.back.dto.CreateUserDTO;
 import com.example.back.dto.GetUserDTO;
 // spring security
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // hash password
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService {
@@ -48,6 +50,12 @@ public class UserService {
     public Optional<GetUserDTO> getById(Long id) {
         return userRepository.findById(id)
                 .map(user -> new GetUserDTO(user));
+    }
+
+    public GetUserDTO getByEmail(String email) {
+        return findByEmail(email)
+                .map(user -> new GetUserDTO(user))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur non trouvé"));
     }
 
     public Optional<User> findByEmail(String email) {

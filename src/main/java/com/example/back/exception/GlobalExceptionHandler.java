@@ -3,6 +3,7 @@ package com.example.back.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -12,7 +13,57 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Not found => Implémente RessourceNotFoundException
+    // === Authentication errors ===
+    @ExceptionHandler(EmailExistsException.class)
+    public ResponseEntity<?> handleEmailExistsException(EmailExistsException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "409 Conflict");
+        response.put("error_message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(StringIndexOutOfBoundsException.class)
+    public ResponseEntity<?> handleStringIndexOutOfBoundsException(StringIndexOutOfBoundsException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "401 Unauthorized");
+        response.put("error_message", "Format de token invalide. Le token doit commencer par 'Bearer '");
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "404 Not Found");
+        response.put("error_message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<?> handleAuthenticationException(AuthenticationException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "401 Unauthorized");
+        response.put("error_message", "Email ou mot de passe incorrect");
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<?> handleInvalidTokenException(InvalidTokenException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "401 Unauthorized");
+        response.put("error_message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<?> handleAuthenticationFailedException(AuthenticationFailedException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "401 Unauthorized");
+        response.put("error_message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    // === Rentals errors ===
+    // Not found
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException ex) {
         Map<String, String> response = new HashMap<>();
@@ -36,6 +87,15 @@ public class GlobalExceptionHandler {
         Map<String, String> response = new HashMap<>();
         response.put("error", "Bad Request");
         response.put("message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // Runtime errors
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "400 Bad Request");
+        response.put("error_message", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
