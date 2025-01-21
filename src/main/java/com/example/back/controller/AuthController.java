@@ -30,7 +30,9 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    // Get user By ID
+    /**
+     * GET /api/user/{id}
+     */
     @GetMapping("/user/{id}")
     public ResponseEntity<GetUserDTO> getUserById(@PathVariable Long id) {
         return userService.getById(id)
@@ -38,7 +40,9 @@ public class AuthController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Create user (hashage du password)
+    /**
+     * POST /api/auth/register
+     */
     @PostMapping(value = "/auth/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@RequestBody CreateUserDTO createUserDTO) {
         // Vérifier si l'utilisateur existe déjà
@@ -62,7 +66,9 @@ public class AuthController {
         }
     }
 
-    // Login (return token)
+    /**
+     * POST /api/auth/login
+     */
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
         try {
@@ -79,7 +85,9 @@ public class AuthController {
         }
     }
 
-    // Get user info with token
+    /**
+     * GET /api/auth/me
+     */
     @GetMapping("/auth/me")
     public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
         try {
