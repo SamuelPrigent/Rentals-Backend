@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class BaseController {
 
-    @Hidden
+    @Hidden // Hide from OpenAPI / Swagger
     @GetMapping("/")
     public ResponseEntity<String> getResponse() {
         return ResponseEntity.ok("Rentals API");

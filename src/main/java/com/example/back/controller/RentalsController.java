@@ -25,7 +25,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
-@Tag(name = "Rentals", description = "API de gestion des locations")
+@Tag(name = "Rentals", description = "Points d'accès API pour la gestion des locations - inclut le listage, la création, la récupération et la mise à jour des annonces de location avec prise en charge des images")
 public class RentalsController {
 
     @Autowired

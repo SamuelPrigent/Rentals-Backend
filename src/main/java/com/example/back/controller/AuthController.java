@@ -1,6 +1,7 @@
 package com.example.back.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import com.example.back.security.JwtUtil;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Auth", description = "Points d'accès API pour l'authentification - inclut l'inscription, la connexion par token JWT et la récupération des informations utilisateur")
 public class AuthController {
 
     @Autowired

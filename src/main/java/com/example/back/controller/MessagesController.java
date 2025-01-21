@@ -12,9 +12,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Messages", description = "Points d'accès API pour la gestion des messages - permet l'envoi de messages entre utilisateurs concernant les locations")
 public class MessagesController {
     @Autowired
     private MessagesService messagesService;
