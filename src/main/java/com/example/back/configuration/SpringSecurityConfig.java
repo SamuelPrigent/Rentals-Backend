@@ -31,13 +31,14 @@ public class SpringSecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
+                    // Auth routes
                     auth.requestMatchers("/api/auth/login", "/api/auth/register").permitAll();
-                    // swagger
+                    // Swagger docs
                     auth.requestMatchers(
                             "/v3/api-docs/**",
                             "/api/v3/api-docs/**",
                             "/api/swagger-ui/**").permitAll();
-                    // other request
+                    // Other request
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
