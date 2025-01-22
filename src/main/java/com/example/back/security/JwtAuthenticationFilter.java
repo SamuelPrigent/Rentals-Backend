@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
-import com.example.back.exception.InvalidTokenException;
 
 import java.io.IOException;
 
@@ -36,13 +35,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = null;
         String userEmail = null;
 
-        // check if request contain bearer token
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        String requestURI = request.getRequestURI();
+        if (!requestURI.equals("/api/auth/login") && !requestURI.equals("/api/auth/register") &&
+                authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             try {
                 userEmail = jwtUtil.extractClaim(token, claims -> claims.get("email", String.class));
             } catch (Exception e) {
-                throw new InvalidTokenException("Token invalide ou expiré");
+                System.out.println("Erreur lors de l'extraction du jeton: " + e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token invalide ou expire");
+                return;
             }
         }
 
