@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import com.example.back.exception.InvalidTokenException;
 
 import java.io.IOException;
 
@@ -41,14 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 userEmail = jwtUtil.extractClaim(token, claims -> claims.get("email", String.class));
             } catch (Exception e) {
-                // Token invalide, on continue sans authentification
+                throw new InvalidTokenException("Token invalide ou expiré");
             }
         }
 
         // extract email via le token
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(userEmail);
-
             // token non expiré + correspond bien à cet utilisateur
             if (!jwtUtil.isTokenExpired(token) && jwtUtil.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
