@@ -42,7 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 userEmail = jwtUtil.extractClaim(token, claims -> claims.get("email", String.class));
             } catch (Exception e) {
-                System.out.println("Erreur lors de l'extraction du jeton: " + e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Token invalide ou expire");
                 return;
