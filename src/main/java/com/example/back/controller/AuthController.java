@@ -118,7 +118,7 @@ public class AuthController {
         })
         @GetMapping("/auth/me")
         public ResponseEntity<GetUserDTO> getCurrentUser(
-                        @Parameter(description = "Token d'authentification (Bearer)", required = true) @RequestHeader("Authorization") String authHeader) {
+                        @Parameter(description = "Token d'authentification (Bearer)", required = false) @RequestHeader("Authorization") String authHeader) {
                 String token = authHeader.substring(7);
                 // Extrait email du token
                 String email = jwtUtil.extractClaim(token, claims -> claims.get("email", String.class));
