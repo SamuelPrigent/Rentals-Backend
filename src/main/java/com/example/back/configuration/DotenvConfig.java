@@ -14,8 +14,9 @@ public class DotenvConfig {
 
     @Bean
     public Dotenv dotenv(ConfigurableEnvironment environment) {
+
         Dotenv dotenv = Dotenv.configure()
-                .directory("/Users/samuel/Desktop/Rental/Back")
+                .directory("Back")
                 .load();
 
         Map<String, Object> envMap = new HashMap<>();
